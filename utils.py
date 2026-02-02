@@ -191,11 +191,10 @@ def generate_power_law_phase_screen(N, alpha):
     k[N//2, N//2] = 1e-10  # avoid div by zero at DC
 
     amplitude = k**(-alpha/2)
-    phase = np.random.rand(N, N)
+    phase = np.random.uniform(0, 2*np.pi, (N, N))
+    F_field = amplitude * np.exp(1j * phase)
 
-    F_field = amplitude * phase
-
-    field = np.fft.ifft2(np.fft.ifftshift(F_field)).imag  # shift back before ifft
+    field = np.fft.ifft2(np.fft.ifftshift(F_field)).real  # shift back before ifft
     field = (field - np.mean(field)) / np.std(field)
         
     return field
